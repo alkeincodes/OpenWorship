@@ -1,0 +1,17 @@
+.el-form {
+    &-item {
+        margin-bottom: $margin * 2;
+        .el-input {
+            margin-bottom: $margin;
+        }
+    }
+}
+
+
+.search-list {
+    @include flexbox(row, center, initial);
+    padding: $padding * 2;
+    svg {
+        margin-right: $margin;
+    }
+}

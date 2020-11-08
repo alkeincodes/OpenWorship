@@ -1,0 +1,27 @@
+.main {
+    &__container {
+        background-color: #EFEFEF;
+        height: 100vh;
+    }
+}
+
+.card {
+    box-shadow: $box-shadow;
+    background-color: #fff;
+    border-radius: $border-radius;
+}
+
+.split {
+    &__container {
+        @include flexbox(row, flex-start, initial);
+        padding: $padding * 2;
+    }
+    &__left {
+        width: 500px;
+        padding: $padding * 2
+    }
+    &__right {
+        width: 100%;
+        padding: $padding * 2
+    }
+}

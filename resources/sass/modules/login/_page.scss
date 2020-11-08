@@ -1,0 +1,39 @@
+.login {
+    &__container {
+        @include flexbox(row, initial, initial);
+        height: 100vh;
+    }
+    &__left {
+        @include flexbox(row, center, center);
+        position: relative;
+        min-width: 620px;
+        padding: $padding * 4;
+
+        .site-logo {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+        }
+
+        .login-fields {
+            &__container {
+                p {
+                    color: $gray;
+                }
+            }
+        }
+        .btn-login {
+            margin-top: $margin * 2;
+        }
+    }
+    &__right {
+        @include flexbox(column, center, center);
+        background-color: $primary;
+        width: 100%;
+        padding: $padding * 4;
+
+        p {
+            color: #fff;
+        }
+    }
+}

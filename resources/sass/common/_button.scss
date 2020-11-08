@@ -1,0 +1,24 @@
+.full-width {
+    width: 100%;
+}
+
+.no {
+    &-bg {
+        background-color: transparent !important;
+    }
+    &-border {
+        border: none !important;
+    }
+}
+
+.el-button {
+    &--danger {
+        &.is-plain {
+            &:focus {
+                color: #F56C6C !important;
+                background: #fef0f0 !important;
+                border-color: #fbc4c4 !important;
+            }
+        }
+    }
+}

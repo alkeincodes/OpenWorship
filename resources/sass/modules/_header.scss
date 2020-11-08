@@ -1,0 +1,25 @@
+.site-header {
+    &__container {
+        @include flexbox(row, center, space-between);
+        margin: 0 auto;
+        padding: $padding 5%;
+        box-shadow: $box-shadow;
+        background-color: #fff;
+        height: 60px;
+    }
+    &__left {
+        @include flexbox(row, center, initial);
+
+        nav {
+            margin-left: $margin;
+            a {
+                margin-left: $margin * 2;
+                color: $gray;
+                &.active {
+                    color: $primary;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}

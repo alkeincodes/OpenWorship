@@ -1,0 +1,23 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
+// Bootstrap
+// @import '~bootstrap/scss/bootstrap';
+
+// utilities
+@import 'utilities/all';
+
+// common
+@import 'common/all';
+
+// modules
+@import 'modules/all';
+
+body {
+    font-family: $default-font !important;
+}

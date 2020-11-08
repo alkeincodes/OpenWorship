@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/stage', function() {
+    return view('stage');
+});
+
+
+Route::post('/create-session', [App\Http\Controllers\StageController::class, 'store']);
+Route::get('/stage/{stage}', [App\Http\Controllers\StageController::class, 'show']);
