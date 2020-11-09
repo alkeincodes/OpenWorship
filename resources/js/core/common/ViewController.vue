@@ -18,40 +18,60 @@
         name: 'ViewController',
         data() {
             return {
-                isLive: false
+                currentSessionHash: null
             }
         },
         computed: {
             user() {
                 return this.$store.getters['auth/user']
+            },
+            isLive() {
+                if(this.user) {
+                    return this.user.current_session != null
+                }
             }
         },
         methods: {
             livePreview() {
-                if(this.isLive) {
+                if(!this.isLive) {
                     this.initiateLiveSession()
-                    this.isLive = false
                 } else {
                     this.endLiveSession()
                 }
             },
             async initiateLiveSession() {
                 this.isLoading = true
-                let payload = {
-                    user_id: this.user.id,
-                    background: 'NEWS',
-                    stage_type: 'bible-view',
-                    displayable: 'content-lamang'
+                let stageContent = this.$store.getters['stage/stageContent']
+
+                console.log(stageContent)
+
+                if(this.user.current_session) {
+                    this.$message.error('You already have a live session.');
+                } else {
+                    const { stage, user } = await this.$store.dispatch('stage/createStageSession', stageContent)
+                    this.$store.commit('auth/SET_CURRENT_USER', user)
+
+                    let userContent = {
+                        key: 'user_id',
+                        value: user.id
+                    }
+                    await this.$store.commit('stage/SET_STAGE_CONTENT', userContent)
+
+                    if(user.current_session) {
+                        let data = {
+                            key: 'session_hash',
+                            value: user.current_session
+                        }
+                        this.$store.commit('stage/SET_STAGE_CONTENT', data)
+                    }
+                    this.currentSessionHash = stage.hash
+                    window.open(`/stage/${stage.hash}`)
                 }
-
-                payload.displayable = JSON.stringify(payload)
-
-                const stage = await this.$store.dispatch('stage/createStageSession', payload)
-
-                window.open(`/stage/${stage.hash}`)
             },
-            endLiveSession() {
-
+            async endLiveSession() {
+                const { data } = await this.$store.dispatch('stage/endStageSession', this.user.current_session)
+                console.log(result)
+                this.$store.commit('auth/SET_CURRENT_USER', data)
             }
         }
     }

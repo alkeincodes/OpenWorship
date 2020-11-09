@@ -6,10 +6,13 @@
       </div>
       <ul>
         <li
-            v-for="i in 10"
-            :key="i"
+            v-for="(item, index) in data"
+            :key="index"
+            :class="{active: activeItem == index}"
+            @click="selectItem(index)"
+            @dblclick="forceUpdate(index)"
         >
-            List {{ i }}
+            {{ item }}
         </li>
       </ul>
   </div>
@@ -17,6 +20,33 @@
 
 <script>
     export default {
-        name: 'ListContainer'
+        name: 'ListContainer',
+        props: {
+            data: Array,
+            type: String
+        },
+        data() {
+            return {
+                activeItem: null
+            }
+        },
+        methods: {
+            selectItem(item) {
+                this.activeItem = item
+                switch(this.type) {
+                    case 'chapters':
+                        this.$emit('update-verse', this.data[item])
+                    break;
+                    case 'books':
+                        this.$emit('update-book', this.data[item])
+                    break;
+                }
+            },
+            forceUpdate(index) {
+                if(this.activeItem == index) {
+                    this.$emit('force-update')
+                }
+            }
+        }
     }
 </script>

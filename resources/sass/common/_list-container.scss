@@ -7,13 +7,15 @@
     }
     &__container {
         width: 100%;
-        min-height: 400px;
+        min-height: 50%;
         font-size: $font-size-xs;
+        margin-bottom: $margin * 2;
 
         ul {
             li {
                 padding: $padding $padding * 2;
                 cursor: pointer;
+                user-select: none;
                 &:hover {
                     background-color: $primary-light;
                 }

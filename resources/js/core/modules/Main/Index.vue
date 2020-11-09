@@ -18,8 +18,21 @@
             MainHeader,
             BibleView
         },
-        mounted() {
-            this.$store.commit('auth/SET_CURRENT_USER', this.user)
+        async mounted() {
+            await this.$store.commit('auth/SET_CURRENT_USER', this.user)
+            let payload = {
+                key: 'user_id',
+                value: this.user.id
+            }
+            await this.$store.commit('stage/SET_STAGE_CONTENT', payload)
+
+            if(this.user.current_session) {
+                let data = {
+                    key: 'session_hash',
+                    value: this.user.current_session
+                }
+                this.$store.commit('stage/SET_STAGE_CONTENT', data)
+            }
         }
     }
 </script>

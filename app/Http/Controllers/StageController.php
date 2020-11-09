@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Stage;
+use App\Events\StageMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StageController extends Controller
 {
@@ -35,14 +38,22 @@ class StageController extends Controller
      */
     public function store(Request $request)
     {
+
         $stage = new Stage;
-        $stage->user_id = $request->user_id;
+        $stage->user_id = Auth::user()->id;
         $stage->background = $request->background;
         $stage->stage_type = $request->stage_type;
         $stage->displayable = $request->displayable;
         $stage->save();
 
-        return $stage;
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->current_session = $stage->hash;
+        $user->save();
+
+        $data['stage'] = $stage;
+        $data['user'] = $user;
+
+        return $data;
     }
 
     /**
@@ -65,7 +76,7 @@ class StageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Stage $stage, Request $request)
     {
 
     }
@@ -77,9 +88,18 @@ class StageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Stage $stage, Request $request)
     {
-        //
+        $stage = Stage::where('id', $stage->id)->first();
+        $stage->user_id = $request->user_id;
+        $stage->background = $request->background;
+        $stage->stage_type = $request->stage_type;
+        $stage->displayable = $request->displayable;
+        $stage->save();
+
+        event(new StageMessage($stage));
+
+        return $stage;
     }
 
     /**
@@ -88,8 +108,14 @@ class StageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Stage $stage, Request $request)
     {
-        //
+        $stage = Stage::where('id', $stage->id)->delete();
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->current_session = null;
+        $user->save();
+
+        return $user;
     }
 }

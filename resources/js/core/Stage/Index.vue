@@ -7,13 +7,14 @@
         <div class="stage-view__content">
             <div class="presentation-main">
                 <pre>
-                    I Love You Lord
-                    For Your Mercy Never Fails Me
+                    {{ stageContent.line }}
                 </pre>
             </div>
             <div class="presentation-meta">
                 <div class="title">
-                    Goodness of God - Bethel Music
+                    <span v-if="stageContent">
+                        {{ `${stageContent.title} - ` }}{{ stageContent.by }}
+                    </span>
                 </div>
                 <div class="branding">
                     Powered by OpenWorship
@@ -30,65 +31,35 @@
         props: {
             content: Object
         },
+        data() {
+            return {
+                stageContent: null
+            }
+        },
         created() {
-            console.log(this.content)
+            let content
+            if(this.content) {
+                let displayable = JSON.parse(this.content.displayable)
+                content = {
+                    title: displayable.title,
+                    line: displayable.line,
+                    by: displayable.by
+                }
+
+                this.stageContent = content
+            }
+        },
+        mounted() {
+            Echo.channel('home')
+                .listen('StageMessage', (e) => {
+                    // console.log(e.message)
+                    let displayable = JSON.parse(e.message.displayable)
+                    this.stageContent = {
+                        title: displayable.title,
+                        line: displayable.line,
+                        by: displayable.by
+                    }
+                })
         }
     }
 </script>
-
-<style lang="scss">
-    .stage-view {
-        &__container {
-            height: 100vh;
-            font-size: 3rem;
-            color: #fff;
-            text-shadow: 2px 2px #000;
-            user-select: none;
-            video {
-                position: fixed;
-                top: 0;
-                left: 0;
-                object-fit: cover;
-                width: 100%;
-                height: 100%;
-            }
-        }
-        &__content {
-            z-index: 2;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-
-            .presentation {
-                &-main {
-                    pre {
-                        font-size: 5rem;
-                        color: #fff;
-                        white-space: pre-line;
-                        text-align: center;
-                        font-weight: bold;
-                    }
-                }
-                &-meta {
-                    display: flex;
-                    align-items: flex-end;
-                    justify-content: space-between;
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    padding: 30px;
-
-                    .title {
-                        font-size: 2rem;
-                    }
-
-                    .branding {
-                        opacity: .3;
-                    }
-                }
-            }
-        }
-    }
-</style>

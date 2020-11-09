@@ -16,7 +16,7 @@ class CreateStageTable extends Migration
         Schema::create('stages', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unsigned();
-            $table->string('background');
+            $table->string('background')->nullable();
             $table->string('stage_type');
             $table->json('displayable')->nullable();
             $table->timestamps();

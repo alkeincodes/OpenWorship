@@ -28,3 +28,5 @@ Route::get('/stage', function() {
 
 Route::post('/create-session', [App\Http\Controllers\StageController::class, 'store']);
 Route::get('/stage/{stage}', [App\Http\Controllers\StageController::class, 'show']);
+Route::put('/stage/{stage}', [App\Http\Controllers\StageController::class, 'update']);
+Route::delete('/stage/{stage}', [App\Http\Controllers\StageController::class, 'destroy']);
